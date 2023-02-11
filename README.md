@@ -26,5 +26,5 @@ thanks to
   - concurrency/parallelism approach
   - media data approach
   - database approach
-  - pipes ❔
+  - sockets ❔
   - possible refactor to nim ( likely not )
