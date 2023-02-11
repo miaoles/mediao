@@ -6,17 +6,19 @@ generates media queues/playlist databases, controls simultaneous playback/intera
 
 example usecase: mpv player, twitch bot interface, 2 media queues: requests queue prioritized, backup queue using generated/imported YouTube/Bandcamp links/playlists
 
+thanks to 
+
 ##### initial todo
 - services:
-  - YouTube (parsing 🗹, api 🗹, importing 🚧)
-  - Bandcamp (parsing, importing)
-  - localhost (parsing, importing)
+  - YouTube ( parsing 🗹, api 🗹, importing 🚧 )
+  - Bandcamp ( parsing, importing )
+  - localhost ( parsing, importing )
 - media players:
-  - mpv 🗹
-  - PySide (mpv embed) ❔
+  - mpv ( python-mpv 🗹 )
+  - PySide ( mpv embed ) ❔
   - web ❔
 - interfaces:
-  - Twitch chatbot 🗹
+  - Twitch chatbot ( pyTwitchAPI 🗹 )
   - cli
   - PySide ❔
 - looking into:
@@ -25,4 +27,4 @@ example usecase: mpv player, twitch bot interface, 2 media queues: requests queu
   - media data approach
   - database approach
   - pipes ❔
-  - possible refactor to nim (likely not)
+  - possible refactor to nim ( likely not )
