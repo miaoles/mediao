@@ -22,9 +22,10 @@ thanks to
   - cli
   - PySide ❔
 - looking into:
+  - ipc sockets refactor
   - setup.py
+  - toml configuration ❔
   - concurrency/parallelism approach
   - media data approach
   - database approach
-  - sockets ❔
-  - possible refactor to nim ( likely not )
+  - refactor with nim ❔ ( likely not )
