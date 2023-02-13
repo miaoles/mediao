@@ -12,9 +12,8 @@ class Media():
 		'media_id',
 		'media_url',
 		'media_title',
-		'media_service',
+		'media_source',
 		'media_duration',
-		'channel_id',
 		'channel_title',
 		'playlist_id',
 		'playlist_title',
@@ -26,9 +25,8 @@ class Media():
 		self.media_id = media_id
 		self.media_url = media_url
 		self.media_title = media_title
-		self.media_service = media_service
+		self.media_source = media_source
 		self.media_duration = media_duration
-		self.channel_id = channel_id
 		self.channel_title = channel_title
 		self.playlist_id = playlist_id
 		self.playlist_title = playlist_title

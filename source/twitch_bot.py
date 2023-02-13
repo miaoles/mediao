@@ -4,7 +4,6 @@
 from configuration.credentials import *
 from configuration.options import *
 
-from media_services import *
 from media_controller import *
 
 from twitchAPI import Twitch
@@ -32,37 +31,43 @@ class TwitchBot():
 		print(f'[#{message.room.name}] {message.user.name}: {message.text}')
 
 	# !mediarequest command
-	async def media_request(self, command:ChatCommand):
-		media_id = get_media_id(command.parameter)
-		if media_id == "None":
+	async def request_media_insert(self, command:ChatCommand):
+		try:
+			media = self.media_controller.get_request_dictionary(command.parameter)
+		except Exception:
 			await command.reply(f"Error: Your URL could not be parsed.")
 		else:
-			await command.reply(f"Success: Your URL was parsed.")
+			self.media_controller.insert_request_dictionary(media)
+			await command.reply(f"Success: '{media['media_title']}' from ''{media['channel_title']}' was requested.")
+
+	# !mediarequest command
+	async def request_current_media(self, command:ChatCommand):
+		try:
+			media = self.media_controller.get_current_media()
+		except Exception:
+			await command.reply(f"Error: No current media.")
+		else:
+			await command.reply(f"{media['media_title']}  from {media['channel_title']} requested by {media['requester_name']}. ( {media['media_url']} )")
 
 	async def start(self):
 		print(f"Starting Twitch Bot.")
-		# set up twitch api instance and add user authentication with some scopes
 		self.twitch = await Twitch(self.app_id, self.app_secret)
 		twitch_authenticator = UserAuthenticator(self.twitch, TWITCH_USER_SCOPE)
 		twitch_token, twitch_refresh_token = await twitch_authenticator.authenticate()
 		await self.twitch.set_user_authentication(twitch_token, TWITCH_USER_SCOPE, twitch_refresh_token)
 
-		# create chat instance
 		self.twitch_chat = await Chat(self.twitch)
-
-		# listen to when the bot is done starting up and ready to join channels
 		self.twitch_chat.register_event(ChatEvent.READY, self.on_ready)
-
-		# listen to chat messages
 		self.twitch_chat.register_event(ChatEvent.MESSAGE, self.on_message)
 
 		# Commands Registration
-		self.twitch_chat.register_command('mediarequest', self.media_request)
-		self.twitch_chat.register_command('request', self.media_request)
-		self.twitch_chat.register_command('mr', self.media_request)
-		self.twitch_chat.register_command('r', self.media_request)
+		for command in ['mediarequest','request','mr','r']:
+			self.twitch_chat.register_command(command, self.request_media_insert)
+		for command in ['currentmedia','media','cm', 'c']:
+			self.twitch_chat.register_command(command, self.request_current_media)
+		for command in ['wrongmedia','wrong','wm', 'w']:
+			self.twitch_chat.register_command(command, self.request_current_media)
 
-		# we are done with our setup, lets start this bot up!
 		self.twitch_chat.start()
 
 	async def stop(self):

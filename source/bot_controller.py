@@ -4,7 +4,7 @@
 from configuration.credentials import *
 from configuration.options import *
 
-from media_services import *
+from media_sources import *
 from media_controller import *
 from twitch_bot import *
 

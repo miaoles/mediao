@@ -13,6 +13,7 @@ import asyncio
 class MediaController:
 	def __init__(self, state_database:StateDatabase, media_player_types):
 		self.current_media = None
+		self.playback_active = False
 		self.state_database = state_database
 		self.media_players = []
 		for media_player_type in media_player_types:
@@ -50,6 +51,27 @@ class MediaController:
 			print(f"Media in queue.")
 			return False
 
+	def get_request_dictionary(self, media_query:str) -> dict:
+		try:
+			media_id = get_media_id(media_query)
+		except Exception:
+			print(f"Media request query failed.")
+			raise Exception
+		else:
+			print(f"Media request query succeeded.")
+			youtube_media_dictionary = get_youtube_media_dictionary(media_id)
+			media_dictionary = convert_youtube_dictionary(youtube_media_dictionary)
+			return media_dictionary
+
+	def insert_request_dictionary(self, media_dictionary:dict):
+		try:
+			self.state_database.insert_media_dictionary(media_dictionary, 'request_queue')
+		except Exception:
+			print(f"Media request insert failed.")
+			raise Exception
+		else:
+			print(media_dictionary)
+
 	def set_current_media(self, media:dict):
 		self.current_media = media
 
@@ -60,6 +82,7 @@ class MediaController:
 		pass
 
 	def get_next_media(self) -> dict:
+		# This one is gonna have the most customization, but is currently hardcoded.
 		request_queue_is_empty = self.state_database.is_table_empty('request_queue')
 		# print(f"Request Queue is empty: {request_queue_is_empty}")
 		generated_queue_is_empty = self.state_database.is_table_empty('generated_queue')

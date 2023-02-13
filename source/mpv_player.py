@@ -21,7 +21,7 @@ class MPV():
 			ytdl=True,
 			osc=True,
 			player_operation_mode='pseudo-gui',
-			script_opts='osc-idlescreen=no',
+			script_opts='osc-idlescreen=no,osc-scalewindowed=1.5',
 			input_default_bindings=True,
 			input_vo_keyboard=True )
 		# self.client.observe_property('idle-active',self.idle_event_observed)
