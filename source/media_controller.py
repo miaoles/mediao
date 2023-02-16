@@ -104,7 +104,7 @@ class MediaController:
 	def play_media(self, media:dict):
 		print(f"Playing media.")
 		for media_player in self.media_players:
-			# print(media)
+			print(f"{media['media_title']}")
 			# media_player.play(media['media_url'])
 			media_player.play(media['media_url'])
 

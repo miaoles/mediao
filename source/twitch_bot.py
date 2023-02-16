@@ -61,7 +61,10 @@ class TwitchBot():
 		except Exception:
 			await command.reply(f"Error: No current media.")
 		else:
-			await command.reply(f"{media['media_title']}  from {media['channel_title']} requested by {media['requester_name']}. ( {media['media_url']} )")
+			if media['requester_name'] == None:
+				await command.reply(f"{media['media_title']}  from {media['channel_title']}. ( {media['media_url']} )")
+			else:
+				await command.reply(f"{media['media_title']}  from {media['channel_title']} requested by {media['requester_name']}. ( {media['media_url']} )")
 
 	async def start(self):
 		print(f"Starting Twitch Bot.")

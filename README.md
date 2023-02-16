@@ -1,6 +1,6 @@
 # mediao
 
-(experimental, proof of concept)
+>02/15/23 - onward this will likely be rewritten around UNIX socket IPC
 
 generates media queues/playlist databases, controls simultaneous playback/interaction for supported media services/interfaces/media players 
 
