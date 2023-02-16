@@ -38,7 +38,7 @@ def get_media_id(media_url:str) -> str:
 
 
 # Uses 1 YouTube API Quota Point
-def get_youtube_media_dictionary(youtube_media_id: str):
+def get_youtube_media_dict(youtube_media_id: str):
 	youtube = build(
 		'youtube',
 		'v3',
@@ -50,20 +50,20 @@ def get_youtube_media_dictionary(youtube_media_id: str):
 	return result
 
 
-def convert_youtube_dictionary(youtube_dictionary) -> dict:
-	media_dictionary = {
-		'media_id': youtube_dictionary['items'][0]['id'],
-		'media_url': 'http://youtu.be/' + youtube_dictionary['items'][0]['id'],
-		'media_title': youtube_dictionary['items'][0]['snippet']['title'],
+def convert_youtube_dict(youtube_dict) -> dict:
+	media_dict = {
+		'media_id': youtube_dict['items'][0]['id'],
+		'media_url': 'http://youtu.be/' + youtube_dict['items'][0]['id'],
+		'media_title': youtube_dict['items'][0]['snippet']['title'],
 		'media_source': 'YouTube',
-		'media_duration': youtube_dictionary['items'][0]['contentDetails']['duration'],
-		'channel_title': youtube_dictionary['items'][0]['snippet']['channelTitle'],
+		'media_duration': youtube_dict['items'][0]['contentDetails']['duration'],
+		'channel_title': youtube_dict['items'][0]['snippet']['channelTitle'],
 		'playlist_id': None,
 		'playlist_title': None,
 		'requester_name': None,
 		'origin_table': None
 	}
-	return media_dictionary
+	return media_dict
 
 # try:
 # 	url = get_media_id('https://www.youtube.com/watch?v=Ky2JPucaXAw')
@@ -71,14 +71,14 @@ def convert_youtube_dictionary(youtube_dictionary) -> dict:
 # 	# parse_media_url('cock')
 # except:
 # 	print(f"oops")
-	# media['items'][0]['url'] = "http://youtu.be/" + youtube_dictionary['items'][0]['id']
+	# media['items'][0]['url'] = "http://youtu.be/" + youtube_dict['items'][0]['id']
 
 	# class YouTube:
 	# def __init__(self, api_key:str):
 	# 	self.api_key = api_key
  #
 	# # Uses 1 YouTube API Quota Point
-	# def get_media_dictionary(self, youtube_media_id: str):
+	# def get_media_dict(self, youtube_media_id: str):
 	# 	youtube = build(
 	# 		'youtube',
 	# 		'v3',

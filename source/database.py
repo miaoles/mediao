@@ -24,7 +24,7 @@ class Database:
 	def establish_database_connection(self):
 		print(f"Connecting to database: {self.database_path}")
 		self.connection = sqlite3.connect(self.database_path, check_same_thread=False)
-		self.connection.row_factory = self.dictionary_factory
+		self.connection.row_factory = self.dict_factory
 		self.cursor = self.connection.cursor()
 		self.lock = Lock()
 
@@ -34,7 +34,7 @@ class Database:
 	def initialize_database_tables(self):
 		pass
 
-	def dictionary_factory(self, cursor, row) -> dict:
+	def dict_factory(self, cursor, row) -> dict:
 		fields = [column[0] for column in cursor.description]
 		return {key: value for key, value in zip(fields, row)}
 
@@ -64,6 +64,18 @@ class Database:
 		self.cursor.execute(
 			"SELECT * FROM " +
 			table_name +
+			" LIMIT 1")
+		row = self.cursor.fetchone()
+		self.lock.release()
+		self.connection_commit()
+		return row
+
+	def get_random_row(self, table_name:str) -> dict:
+		self.lock.acquire(True)
+		self.cursor.execute(
+			"SELECT * FROM " +
+			table_name +
+			" ORDER BY RANDOM()" +
 			" LIMIT 1")
 		row = self.cursor.fetchone()
 		self.lock.release()

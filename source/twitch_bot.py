@@ -33,12 +33,26 @@ class TwitchBot():
 	# !mediarequest command
 	async def request_media_insert(self, command:ChatCommand):
 		try:
-			media = self.media_controller.get_request_dictionary(command.parameter)
+			media = self.media_controller.get_request_dict(command.parameter)
 		except Exception:
 			await command.reply(f"Error: Your URL could not be parsed.")
 		else:
-			self.media_controller.insert_request_dictionary(media)
+			self.media_controller.insert_request_dict(media)
 			await command.reply(f"Success: '{media['media_title']}' from ''{media['channel_title']}' was requested.")
+
+	async def request_media_import(self, command:ChatCommand):
+		if command.user.name == "iao_":
+			await command.reply(f"Importing...")
+			self.media_controller.insert_request_playlist(command.parameter)
+		else:
+			await command.reply(f"Error: You are not permitted to command this.")
+		# try:
+		# 	media = self.media_controller.get_request_dict(command.parameter)
+		# except Exception:
+		# 	await command.reply(f"Error: Your URL could not be parsed.")
+		# else:
+		# 	self.media_controller.insert_request_dict(media)
+		# 	await command.reply(f"Success: '{media['media_title']}' from ''{media['channel_title']}' was requested.")
 
 	# !mediarequest command
 	async def request_current_media(self, command:ChatCommand):
@@ -61,12 +75,14 @@ class TwitchBot():
 		self.twitch_chat.register_event(ChatEvent.MESSAGE, self.on_message)
 
 		# Commands Registration
-		for command in ['mediarequest','request','mr','r']:
+		for command in ['mediarequest','singlerequest','request','mr','sr','r']:
 			self.twitch_chat.register_command(command, self.request_media_insert)
 		for command in ['currentmedia','media','cm', 'c']:
 			self.twitch_chat.register_command(command, self.request_current_media)
 		for command in ['wrongmedia','wrong','wm', 'w']:
 			self.twitch_chat.register_command(command, self.request_current_media)
+		for command in ['importmedia','import','im', 'i']:
+			self.twitch_chat.register_command(command, self.request_media_import)
 
 		self.twitch_chat.start()
 

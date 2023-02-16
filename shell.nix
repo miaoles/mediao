@@ -8,7 +8,7 @@ let
         google-auth-oauthlib
         google-auth-httplib2
         isodate
-        #yt-dlp
+        yt-dlp
     ];
     my-python = pkgs.python3.withPackages my-python-packages;
 in my-python.env

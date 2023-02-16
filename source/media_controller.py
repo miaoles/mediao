@@ -51,7 +51,7 @@ class MediaController:
 			print(f"Media in queue.")
 			return False
 
-	def get_request_dictionary(self, media_query:str) -> dict:
+	def get_request_dict(self, media_query:str) -> dict:
 		try:
 			media_id = get_media_id(media_query)
 		except Exception:
@@ -59,18 +59,21 @@ class MediaController:
 			raise Exception
 		else:
 			print(f"Media request query succeeded.")
-			youtube_media_dictionary = get_youtube_media_dictionary(media_id)
-			media_dictionary = convert_youtube_dictionary(youtube_media_dictionary)
-			return media_dictionary
+			youtube_media_dict = get_youtube_media_dict(media_id)
+			media_dict = convert_youtube_dict(youtube_media_dict)
+			return media_dict
 
-	def insert_request_dictionary(self, media_dictionary:dict):
+	def insert_request_dict(self, media_dict:dict):
 		try:
-			self.state_database.insert_media_dictionary(media_dictionary, 'request_queue')
+			self.state_database.insert_media_dict(media_dict, 'request_queue')
 		except Exception:
 			print(f"Media request insert failed.")
 			raise Exception
 		else:
-			print(media_dictionary)
+			print(media_dict)
+
+	def insert_request_playlist(self, playlist_filename:str):
+		self.state_database.insert_youtube_playlist(playlist_filename, 'generated_queue')
 
 	def set_current_media(self, media:dict):
 		self.current_media = media
@@ -89,10 +92,14 @@ class MediaController:
 		# print(f"Generated Queue is empty: {generated_queue_is_empty}")
 		if not request_queue_is_empty:
 			print(f"Getting media from Request Queue.")
-			return self.state_database.get_lowest_id_row('request_queue')
+			lowest_id_request_row = self.state_database.get_lowest_id_row('request_queue')
+			self.state_database.delete_lowest_id_row('request_queue')
+			return lowest_id_request_row
+			# return self.state_database.get_lowest_id_row('request_queue')
 		if not generated_queue_is_empty:
 			print(f"Getting media from Generated Queue.")
-			return self.state_database.get_lowest_id_row('generated_queue')
+			# return self.state_database.get_lowest_id_row('generated_queue')
+			return self.state_database.get_random_row('generated_queue')
 
 	def play_media(self, media:dict):
 		print(f"Playing media.")
@@ -104,6 +111,7 @@ class MediaController:
 	def enable_playback(self):
 		print(f"Enabling media playback.")
 		self.playback_active = True
+		self.iterate_playback()
 
 	def disable_playback(self):
 		print(f"Disabling media playback.")
