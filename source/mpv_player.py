@@ -21,9 +21,12 @@ class MPV():
 			ytdl=True,
 			osc=True,
 			player_operation_mode='pseudo-gui',
-			script_opts='osc-idlescreen=no,osc-scalewindowed=1.5',
+			script_opts='osc-idlescreen=no,osc-scalewindowed=2.0',
 			input_default_bindings=True,
-			input_vo_keyboard=True )
+			input_vo_keyboard=True,
+			af="loudnorm=I=-24.0:LRA=24.0:TP=-6.0",
+			# ytdl-format="bestvideo[height=?144][fps<=?30][vcodec!=?vp9]+bestaudio/best"
+			ytdl_format="bestvideo[height<=?480]+bestaudio/best" )
 		# self.client.observe_property('idle-active',self.idle_event_observed)
 
 	async def stop(self):
